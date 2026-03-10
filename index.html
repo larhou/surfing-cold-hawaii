@@ -998,8 +998,10 @@
         <p>When I walk towards the cold water and the wild waves, something happens. The fear is real. The cold bites. The waves look bigger up close. But somewhere in my head, a guitar riff starts playing. The same raw, uncontrollable energy I feel in the music — I feel it in my body. My grip tightens on the board. The fear slowly dissolves. And I go.</p>
         <p>These guitar solos are what I hear in my head in that moment. The way Slash grabs a guitar and fires off the most beautiful, expressive riffs ever played — that is exactly how it feels to throw yourself into a wave you're not sure you can handle. Pure instinct. Pure release.</p>
         <p style="margin-top:1.2rem;">Want to feel it yourself? <a href="https://www.youtube.com/watch?v=1w7OgIMMRc4&amp;t=150s" target="_blank" rel="noopener" style="color:var(--red); font-weight:700; text-decoration:underline;">Listen to Slash here</a> — close your eyes, and imagine the North Sea in front of you.</p>
+        <p style="margin-top:1.4rem; font-style:italic; color:var(--teal); font-weight:600;">Now hear it in the song — click below to jump straight to the moment:</p>
         <div class="solo-cards">
-          <div class="solo-card">
+          <div class="solo-card solo-card-clickable" onclick="playSoloAt(121)" title="Click to play from 2:01" style="cursor:pointer; border-color:var(--red); position:relative;">
+            <div style="position:absolute;top:0.5rem;right:0.7rem;font-size:0.7rem;color:var(--red);font-family:'Space Mono',monospace;letter-spacing:0.08em;">▶ PLAY FROM HERE</div>
             <div class="solo-time">2:01 — 2:30</div>
             <div class="solo-name">Main Guitar Solo — The Main Drop</div>
             <p>Right after the explosive chorus, the lead guitar takes over with a blistering, face-melting solo that perfectly captures the chaos and thrill of a heavy wave crashing down.</p>
@@ -1413,6 +1415,20 @@
       }
     }, 600);
   });
+
+  // Global function for solo card click-to-play
+  window.playSoloAt = function(seconds) {
+    document.getElementById('listen').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      audio.currentTime = seconds;
+      if (audio.paused) {
+        audio.play().then(() => {
+          btnPlay.textContent = '⏸';
+          document.querySelectorAll('.reel').forEach(r => r.style.animationPlayState = 'running');
+        }).catch(() => {});
+      }
+    }, 650);
+  };
 
   soloMarker.addEventListener('click', (e) => {
     e.stopPropagation(); // don't also trigger progress-bar click
