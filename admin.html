@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cold Hawaii — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal: #2B8FAD; --orange: #FA6436; --ink: #1B2B2F;
+      --red: #C23637; --sky: #73B6CE; --bg: #f5f7f8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); font-family: 'Courier Prime', monospace; color: var(--ink); min-height: 100vh; }
+
+    header {
+      background: var(--ink); color: #fff; padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    header h1 { font-family: 'Space Mono', monospace; font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    header span { font-size: 0.8rem; color: var(--sky); }
+
+    #login-screen {
+      max-width: 400px; margin: 6rem auto; padding: 2rem;
+      background: #fff; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink);
+    }
+    #login-screen h2 { font-family: 'Space Mono', monospace; font-size: 1rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    #login-screen input {
+      width: 100%; border: 2px solid var(--ink); padding: 0.7rem 1rem;
+      font-family: 'Courier Prime', monospace; font-size: 1rem; margin-bottom: 1rem; outline: none;
+    }
+    #login-screen button {
+      width: 100%; background: var(--orange); color: #fff; border: 3px solid var(--ink);
+      padding: 0.7rem; font-family: 'Space Mono', monospace; font-size: 0.9rem;
+      cursor: pointer; box-shadow: 4px 4px 0 var(--ink); text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    #login-screen button:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink); }
+    #login-error { color: var(--red); font-size: 0.85rem; margin-top: 0.5rem; }
+
+    #admin-panel { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; }
+
+    .stats-bar {
+      display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem;
+      background: #fff; border: 2px solid var(--ink); padding: 1rem 1.5rem;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Space Mono', monospace; font-size: 1.8rem; font-weight: 700; color: var(--orange); }
+    .stat-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #888; }
+
+    .filter-bar { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      background: #fff; border: 2px solid var(--ink); padding: 0.4rem 1rem;
+      font-family: 'Space Mono', monospace; font-size: 0.72rem; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .filter-btn.active { background: var(--ink); color: #fff; }
+
+    .comment-card {
+      background: #fff; border: 2px solid #ddd; padding: 1.2rem; margin-bottom: 1rem;
+      position: relative;
+    }
+    .comment-card.is-reply { margin-left: 2rem; border-left: 4px solid var(--sky); }
+    .comment-meta { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .comment-name { font-weight: 700; color: var(--teal); }
+    .comment-time { font-size: 0.75rem; color: #aaa; font-family: 'Space Mono', monospace; }
+    .comment-body { color: #333; white-space: pre-wrap; font-size: 0.95rem; margin-bottom: 0.8rem; }
+    .comment-reply-badge {
+      display: inline-block; background: var(--sky); color: #fff;
+      font-size: 0.7rem; padding: 0.15rem 0.5rem; font-family: 'Space Mono', monospace;
+      text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;
+    }
+    .delete-btn {
+      background: var(--red); color: #fff; border: 2px solid var(--ink);
+      padding: 0.3rem 0.9rem; font-family: 'Space Mono', monospace; font-size: 0.72rem;
+      cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .delete-btn:hover { opacity: 0.85; }
+
+    #empty-msg { text-align: center; color: #aaa; font-style: italic; padding: 3rem; }
+    #loading-msg { text-align: center; color: var(--teal); padding: 3rem; }
+
+    .logout-btn {
+      background: none; border: 1px solid var(--sky); color: var(--sky);
+      padding: 0.3rem 0.8rem; font-family: 'Space Mono', monospace; font-size: 0.7rem;
+      cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .logout-btn:hover { background: var(--sky); color: #fff; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌊 Cold Hawaii — Admin</h1>
+  <div style="display:flex; align-items:center; gap:1rem;">
+    <span id="header-count"></span>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<!-- Login screen -->
+<div id="login-screen">
+  <h2>🔒 Admin Login</h2>
+  <input type="password" id="pwd-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()" />
+  <button onclick="login()">Login</button>
+  <div id="login-error"></div>
+</div>
+
+<!-- Admin panel -->
+<div id="admin-panel">
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-num" id="stat-total">—</div>
+      <div class="stat-label">Total Comments</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="stat-top">—</div>
+      <div class="stat-label">Top-level</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="stat-replies">—</div>
+      <div class="stat-label">Replies</div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('top', this)">Top-level only</button>
+    <button class="filter-btn" onclick="setFilter('replies', this)">Replies only</button>
+  </div>
+
+  <div id="comments-container">
+    <div id="loading-msg">Loading comments...</div>
+  </div>
+</div>
+
+<script>
+  let adminPassword = '';
+  let allComments = [];
+  let currentFilter = 'all';
+
+  function login() {
+    const pwd = document.getElementById('pwd-input').value;
+    if (!pwd) return;
+    adminPassword = pwd;
+    loadComments();
+  }
+
+  function logout() {
+    adminPassword = '';
+    allComments = [];
+    document.getElementById('login-screen').style.display = 'block';
+    document.getElementById('admin-panel').style.display = 'none';
+    document.getElementById('pwd-input').value = '';
+  }
+
+  async function loadComments() {
+    try {
+      const res = await fetch('/api/admin?password=' + encodeURIComponent(adminPassword));
+      if (res.status === 401) {
+        document.getElementById('login-error').textContent = '✕ Wrong password.';
+        adminPassword = '';
+        return;
+      }
+      const { comments } = await res.json();
+      allComments = comments;
+
+      // Show admin panel
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+      document.getElementById('login-error').textContent = '';
+
+      // Stats
+      const top = comments.filter(c => !c.parent_id).length;
+      const replies = comments.filter(c => c.parent_id).length;
+      document.getElementById('stat-total').textContent = comments.length;
+      document.getElementById('stat-top').textContent = top;
+      document.getElementById('stat-replies').textContent = replies;
+      document.getElementById('header-count').textContent = comments.length + ' comments';
+
+      renderComments();
+    } catch(e) {
+      document.getElementById('login-error').textContent = '✕ Connection error. Try again.';
+    }
+  }
+
+  function setFilter(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderComments();
+  }
+
+  function renderComments() {
+    const container = document.getElementById('comments-container');
+    let filtered = allComments;
+    if (currentFilter === 'top') filtered = allComments.filter(c => !c.parent_id);
+    if (currentFilter === 'replies') filtered = allComments.filter(c => c.parent_id);
+
+    if (!filtered.length) {
+      container.innerHTML = '<div id="empty-msg">No comments yet.</div>';
+      return;
+    }
+
+    container.innerHTML = filtered.map(c => {
+      const isReply = !!c.parent_id;
+      const parentName = isReply ? (allComments.find(p => p.id === c.parent_id)?.name || 'unknown') : '';
+      return `
+        <div class="comment-card ${isReply ? 'is-reply' : ''}">
+          ${isReply ? `<div class="comment-reply-badge">↩ Reply to ${escHtml(parentName)}</div>` : ''}
+          <div class="comment-meta">
+            <span class="comment-name">${escHtml(c.name)}</span>
+            <span class="comment-time">${new Date(c.created_at).toLocaleString('en-GB')}</span>
+          </div>
+          <div class="comment-body">${escHtml(c.body)}</div>
+          <button class="delete-btn" onclick="deleteComment(${c.id}, this)">🗑 Delete${isReply ? ' Reply' : ' + Replies'}</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function deleteComment(id, btn) {
+    if (!confirm('Delete this comment' + (allComments.find(c=>c.id===id && !c.parent_id) ? ' and all its replies' : '') + '?')) return;
+    btn.disabled = true;
+    btn.textContent = 'Deleting...';
+    try {
+      const res = await fetch('/api/admin?password=' + encodeURIComponent(adminPassword) + '&id=' + id, { method: 'DELETE' });
+      if (!res.ok) throw new Error();
+      await loadComments();
+    } catch(e) {
+      btn.disabled = false;
+      btn.textContent = '🗑 Delete';
+      alert('Failed to delete. Please try again.');
+    }
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+</body>
+</html>

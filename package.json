@@ -1,0 +1,10 @@
+{
+  "name": "cold-hawaii-landing",
+  "version": "1.0.0",
+  "description": "Surfing Cold Hawaii — landing page with comments",
+  "private": true,
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.3",
+    "resend": "^3.2.0"
+  }
+}

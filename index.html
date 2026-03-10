@@ -819,6 +819,7 @@
     <li><a href="#map-section">Map</a></li>
     <li><a href="#solos">Guitar</a></li>
     <li><a href="#lyrics">Lyrics</a></li>
+    <li><a href="#comments">Comments</a></li>
   </ul>
 </nav>
 
@@ -1113,6 +1114,52 @@
   </div>
 </section>
 
+<!-- ─── COMMENTS ───────────────────────────────────────────────────── -->
+<section id="comments" class="section">
+  <div class="container">
+    <div style="max-width:760px; margin:0 auto;">
+      <div class="section-tag" style="border-color:var(--orange); color:var(--orange);">Join the Conversation</div>
+      <h2 style="color:var(--ink); font-size:clamp(1.6rem,4vw,2.8rem);">Leave a <span class="accent">Comment</span></h2>
+      <p style="color:#444; margin-bottom:2rem; font-size:0.95rem;">Have you been to Klitmøller? Do you surf the North Sea? Does this song remind you of something? Tell us below.</p>
+
+      <!-- Comment form -->
+      <div id="comment-form-wrap" style="border:3px solid var(--ink); padding:1.5rem; margin-bottom:2.5rem; background:#fff;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+          <div>
+            <label style="display:block; font-family:'Space Mono',monospace; font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink); margin-bottom:0.4rem;">Your Name *</label>
+            <input id="c-name" type="text" maxlength="80" placeholder="e.g. Lars from Copenhagen"
+              style="width:100%; border:2px solid var(--ink); padding:0.6rem 0.8rem; font-family:'Courier Prime',monospace; font-size:0.95rem; outline:none; background:#fff;" />
+          </div>
+          <div id="reply-indicator" style="display:none; align-items:flex-end; padding-bottom:0.1rem;">
+            <div style="background:var(--sky); color:#fff; padding:0.5rem 0.8rem; font-size:0.82rem; font-family:'Space Mono',monospace; border:2px solid var(--ink); width:100%; display:flex; justify-content:space-between; align-items:center;">
+              <span>↩ Replying to <strong id="reply-to-name"></strong></span>
+              <button onclick="cancelReply()" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1rem;">✕</button>
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label style="display:block; font-family:'Space Mono',monospace; font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink); margin-bottom:0.4rem;">Your Comment *</label>
+          <textarea id="c-body" rows="4" maxlength="2000" placeholder="Share your thoughts about the song, Klitmøller, or cold-water surfing..."
+            style="width:100%; border:2px solid var(--ink); padding:0.6rem 0.8rem; font-family:'Courier Prime',monospace; font-size:0.95rem; outline:none; resize:vertical; background:#fff;"></textarea>
+          <div style="text-align:right; font-size:0.75rem; color:#999; margin-top:0.2rem;"><span id="char-count">0</span>/2000</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+          <button id="submit-btn" onclick="submitComment()"
+            style="background:var(--orange); color:#fff; border:3px solid var(--ink); padding:0.7rem 1.8rem; font-family:'Permanent Marker',cursive; font-size:1.1rem; cursor:pointer; box-shadow:4px 4px 0 var(--ink); transition:transform 0.1s, box-shadow 0.1s;">
+            🌊 Post Comment
+          </button>
+          <span id="submit-msg" style="font-size:0.85rem; color:var(--teal);"></span>
+        </div>
+      </div>
+
+      <!-- Comments list -->
+      <div id="comments-list">
+        <div style="text-align:center; color:#aaa; font-style:italic; padding:2rem 0;">Loading comments...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ─── FOOTER ──────────────────────────────────────────────────────── -->
 <footer>
   <div class="container">
@@ -1126,6 +1173,129 @@
     <p class="footer-copy">Coded with cold hands and strong coffee in Klitmøller. &nbsp;|&nbsp; Dedicated to the surfers of Cold Hawaii. &nbsp;|&nbsp; © 2026</p>
   </div>
 </footer>
+
+<!-- ─── COMMENTS JS ─────────────────────────────────────────────────── -->
+<script>
+  const API = '/api/comments';
+  let replyParentId = null;
+  let replyParentName = '';
+
+  // Character counter
+  document.getElementById('c-body').addEventListener('input', function() {
+    document.getElementById('char-count').textContent = this.value.length;
+  });
+
+  function setReply(id, name) {
+    replyParentId = id;
+    replyParentName = name;
+    document.getElementById('reply-indicator').style.display = 'flex';
+    document.getElementById('reply-to-name').textContent = name;
+    document.getElementById('c-body').focus();
+    document.getElementById('c-body').placeholder = 'Write your reply to ' + name + '...';
+  }
+
+  function cancelReply() {
+    replyParentId = null;
+    replyParentName = '';
+    document.getElementById('reply-indicator').style.display = 'none';
+    document.getElementById('c-body').placeholder = 'Share your thoughts about the song, Klitmøller, or cold-water surfing...';
+  }
+
+  function timeAgo(dateStr) {
+    const diff = (Date.now() - new Date(dateStr)) / 1000;
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+    if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
+    return new Date(dateStr).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+  }
+
+  function renderComment(c, replies) {
+    const reps = replies.filter(r => r.parent_id === c.id);
+    const repliesHtml = reps.map(r => `
+      <div style="margin-left:2rem; margin-top:0.8rem; border-left:3px solid var(--sky); padding-left:1rem;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:0.5rem;">
+          <strong style="color:var(--teal); font-size:0.9rem;">↩ ${escHtml(r.name)}</strong>
+          <span style="font-size:0.75rem; color:#aaa;">${timeAgo(r.created_at)}</span>
+        </div>
+        <p style="color:#333; margin-top:0.3rem; font-size:0.9rem; white-space:pre-wrap;">${escHtml(r.body)}</p>
+      </div>
+    `).join('');
+
+    return `
+      <div class="comment-card" style="border:2px solid #e0e0e0; padding:1.2rem; margin-bottom:1.2rem; background:#fff;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.6rem;">
+          <strong style="color:var(--ink); font-size:1rem;">${escHtml(c.name)}</strong>
+          <span style="font-size:0.75rem; color:#aaa; font-family:'Space Mono',monospace;">${timeAgo(c.created_at)}</span>
+        </div>
+        <p style="color:#333; white-space:pre-wrap; font-size:0.95rem;">${escHtml(c.body)}</p>
+        ${repliesHtml}
+        <button onclick="setReply(${c.id}, '${escHtml(c.name).replace(/'/g,"\\'")}')"
+          style="margin-top:0.8rem; background:none; border:2px solid var(--sky); color:var(--teal); padding:0.3rem 0.9rem; font-family:'Space Mono',monospace; font-size:0.72rem; letter-spacing:0.05em; cursor:pointer; text-transform:uppercase;">
+          ↩ Reply
+        </button>
+      </div>
+    `;
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function loadComments() {
+    const list = document.getElementById('comments-list');
+    try {
+      const res = await fetch(API);
+      const { comments, replies } = await res.json();
+      if (!comments.length) {
+        list.innerHTML = '<div style="text-align:center; color:#aaa; font-style:italic; padding:2rem 0;">Be the first to leave a comment! 🌊</div>';
+        return;
+      }
+      list.innerHTML = `<p style="font-family:\'Space Mono\',monospace; font-size:0.75rem; color:#aaa; margin-bottom:1rem; text-transform:uppercase; letter-spacing:0.08em;">${comments.length} comment${comments.length !== 1 ? 's' : ''}</p>` +
+        comments.map(c => renderComment(c, replies)).join('');
+    } catch(e) {
+      list.innerHTML = '<div style="color:var(--red); padding:1rem;">Could not load comments. Please try again later.</div>';
+    }
+  }
+
+  async function submitComment() {
+    const name = document.getElementById('c-name').value.trim();
+    const body = document.getElementById('c-body').value.trim();
+    const msg  = document.getElementById('submit-msg');
+    const btn  = document.getElementById('submit-btn');
+
+    if (!name || !body) { msg.textContent = '⚠ Please fill in your name and comment.'; msg.style.color = 'var(--red)'; return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Posting...';
+    msg.textContent = '';
+
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, body, parent_id: replyParentId })
+      });
+      if (!res.ok) throw new Error();
+      document.getElementById('c-name').value = '';
+      document.getElementById('c-body').value = '';
+      document.getElementById('char-count').textContent = '0';
+      cancelReply();
+      msg.textContent = '✓ Comment posted!';
+      msg.style.color = 'var(--teal)';
+      await loadComments();
+    } catch(e) {
+      msg.textContent = '✕ Something went wrong. Please try again.';
+      msg.style.color = 'var(--red)';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '🌊 Post Comment';
+    }
+  }
+
+  // Load on page ready
+  loadComments();
+</script>
 
 <!-- ─── CUSTOM PLAYER JS ──────────────────────────────────── -->
 <script>
