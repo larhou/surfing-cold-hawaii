@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surfing Cold Hawaii</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── PALETTE ─────────────────────────────────────────── */
+    :root {
+      --sand:       #EDE0CE;
+      --sand-dark:  #ddd0b8;
+      --teal:       #2B8FAD;
+      --teal-dark:  #1E7A96;
+      --sky:        #73B6CE;
+      --red:        #C23637;
+      --orange:     #FA6436;
+      --cloud:      #F9FAFB;
+      --ink:        #1B2B2F;
+    }
+
+    /* ─── GRAIN TEXTURE ───────────────────────────────────── */
+    @keyframes grain {
+      0%, 100% { transform: translate(0, 0); }
+      10%       { transform: translate(-2%, -3%); }
+      20%       { transform: translate(3%, 2%); }
+      30%       { transform: translate(-1%, 4%); }
+      40%       { transform: translate(4%, -1%); }
+      50%       { transform: translate(-3%, 3%); }
+      60%       { transform: translate(2%, -4%); }
+      70%       { transform: translate(-4%, 1%); }
+      80%       { transform: translate(1%, -2%); }
+      90%       { transform: translate(-2%, 4%); }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--sand);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      color: var(--teal);
+      font-family: 'Courier Prime', monospace;
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--teal-dark);
+      border-bottom: 3px solid var(--ink);
+      padding: 0.7rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.5rem;
+    }
+    .nav-logo {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 1.3rem; color: var(--orange);
+      letter-spacing: 0.02em;
+      text-shadow: 2px 2px 0 var(--ink);
+    }
+    .nav-links { display: flex; gap: 1.4rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a {
+      color: var(--cloud); text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .nav-links a:hover { color: var(--orange); border-bottom-color: var(--orange); }
+
+    /* ─── ASCII HEADER ────────────────────────────────────── */
+    .ascii-header {
+      background: #1a5f73;
+      color: var(--sky);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      line-height: 1.2;
+      padding: 1rem 1.5rem;
+      white-space: pre;
+      overflow-x: auto;
+      border-bottom: 3px solid var(--ink);
+      text-align: center;
+    }
+
+    /* ─── HERO ────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      border-bottom: 4px solid var(--ink);
+    }
+    #hero .bg {
+      position: absolute; inset: 0;
+      background: url('images/hero_wave.jpg') center 40% / cover no-repeat;
+    }
+    #hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,30,38,0.78) 0%, rgba(10,30,38,0.2) 50%, transparent 100%);
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      padding: 2.5rem 2rem 3rem;
+      max-width: 820px;
+    }
+    .hero-stamp {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--orange);
+      border: 2px solid var(--orange);
+      padding: 0.25rem 0.7rem;
+      margin-bottom: 1.2rem;
+      transform: rotate(-1.5deg);
+    }
+    .hero-title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(3.8rem, 12vw, 9rem);
+      line-height: 0.92;
+      color: var(--cloud);
+      text-shadow: 4px 4px 0 var(--ink), -1px -1px 0 var(--teal-dark);
+      margin-bottom: 1.2rem;
+    }
+    .hero-title .line2 {
+      color: var(--orange);
+      display: block;
+      text-shadow: 4px 4px 0 var(--ink);
+    }
+    .hero-sub {
+      font-family: 'Courier Prime', monospace;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: rgba(244,246,246,0.8);
+      max-width: 480px;
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--orange);
+      padding-left: 1rem;
+    }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* ─── BUTTONS ─────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1.6rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+      font-weight: 700;
+      text-decoration: none; cursor: pointer;
+      border: 3px solid var(--ink);
+      transition: transform 0.1s;
+    }
+    .btn:active { transform: translate(3px, 3px); }
+    .btn-orange {
+      background: var(--orange); color: var(--ink);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+    .btn-orange:hover { box-shadow: 3px 3px 0 var(--ink); transform: translate(2px, 2px); }
+    .btn-teal {
+      background: var(--teal); color: var(--cloud);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+    .btn-teal:hover { box-shadow: 3px 3px 0 var(--ink); transform: translate(2px, 2px); }
+    .btn-cloud {
+      background: var(--cloud); color: var(--ink);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+    .btn-cloud:hover { box-shadow: 3px 3px 0 var(--ink); transform: translate(2px, 2px); }
+
+    /* ─── SECTION WRAPPERS ────────────────────────────────── */
+    .section {
+      padding: 4rem 1.5rem;
+      border-bottom: 3px solid var(--ink);
+    }
+    .container { max-width: 1060px; margin: 0 auto; }
+
+    .section-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--cloud);
+      background: var(--teal);
+      padding: 0.2rem 0.6rem;
+      margin-bottom: 0.8rem;
+      border: 2px solid var(--ink);
+    }
+    h2 {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--teal);
+      line-height: 1.05;
+      margin-bottom: 1.2rem;
+    }
+    h2 .accent { color: var(--red); }
+    h3 {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 1.3rem; color: var(--teal);
+      margin-bottom: 0.6rem;
+    }
+    p { color: var(--ink); margin-bottom: 0.9rem; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ─── CUSTOM AUDIO PLAYER ─────────────────────────────── */
+    #listen { background: var(--teal); border-bottom: 4px solid var(--ink); }
+    .cassette-wrap {
+      max-width: 680px; margin: 0 auto;
+      text-align: center;
+    }
+    .cassette-title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: var(--orange);
+      text-shadow: 3px 3px 0 var(--ink);
+      margin-bottom: 0.4rem;
+    }
+    .cassette-sub {
+      font-family: 'Courier Prime', monospace;
+      font-style: italic; font-size: 0.88rem;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 2rem;
+    }
+    /* the player shell */
+    .cassette-player {
+      background: #1a4f60;
+      border: 3px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink);
+      padding: 1.5rem 1.8rem 1.8rem;
+      position: relative;
+      margin-bottom: 1.8rem;
+    }
+    .cassette-player::before {
+      content: '▶ COLD HAWAII TAPE ◀';
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.3em;
+      color: var(--sky);
+      text-align: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(115,182,206,0.3);
+      padding-bottom: 0.6rem;
+    }
+    /* reels */
+    .reels {
+      display: flex; justify-content: space-around; align-items: center;
+      margin-bottom: 1.2rem;
+    }
+    .reel {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      border: 3px solid var(--sky);
+      background: #0d3040;
+      position: relative;
+      transition: transform 0.1s;
+    }
+    .reel::before {
+      content: '';
+      position: absolute; inset: 8px;
+      border-radius: 50%;
+      border: 2px solid rgba(115,182,206,0.4);
+    }
+    .reel::after {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--sky);
+    }
+    .reel.spinning {
+      animation: spin 1.2s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .cassette-tape-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; color: rgba(200,235,245,0.8);
+      letter-spacing: 0.15em; text-align: center;
+    }
+    /* progress */
+    .progress-wrap {
+      margin: 1rem 0 0.5rem;
+      position: relative;
+    }
+    .progress-bar-bg {
+      width: 100%; height: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(115,182,206,0.3);
+      cursor: pointer;
+      position: relative;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--orange);
+      width: 0%;
+      transition: width 0.3s linear;
+      pointer-events: none;
+    }
+    .time-display {
+      display: flex; justify-content: space-between;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; color: rgba(200,235,245,0.9);
+      margin-top: 0.3rem;
+    }
+    /* controls */
+    .controls {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1rem; margin-top: 1rem;
+    }
+    .ctrl-btn {
+      background: none; border: 2px solid rgba(115,182,206,0.4);
+      color: var(--sky); cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; padding: 0.4rem 0.8rem;
+      transition: all 0.15s;
+    }
+    .ctrl-btn:hover { border-color: var(--sky); color: var(--cloud); }
+    .play-btn {
+      background: var(--orange); border: 3px solid var(--ink);
+      color: var(--ink); cursor: pointer;
+      font-size: 1.1rem; padding: 0.6rem 1.2rem;
+      box-shadow: 4px 4px 0 var(--ink);
+      transition: all 0.1s;
+      font-family: 'Space Mono', monospace;
+    }
+    .play-btn:hover { box-shadow: 2px 2px 0 var(--ink); transform: translate(2px,2px); }
+    .volume-wrap {
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-top: 0.8rem; justify-content: center;
+    }
+    .volume-wrap label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; color: rgba(200,235,245,0.9);
+      letter-spacing: 0.1em;
+    }
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 90px; height: 4px;
+      background: rgba(115,182,206,0.3);
+      outline: none; cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px; height: 12px;
+      background: var(--orange);
+      border: 2px solid var(--ink);
+    }
+    /* hidden native audio */
+    #native-audio { display: none; }
+
+    /* ─── ABOUT ───────────────────────────────────────────── */
+    #about { background: var(--sand); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: start;
+    }
+    /* polaroid photo */
+    .polaroid {
+      background: var(--cloud);
+      padding: 0.9rem 0.9rem 2.5rem;
+      border: 2px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink);
+      transform: rotate(-2.5deg);
+      display: inline-block;
+      width: 100%;
+    }
+    .polaroid img { width: 100%; display: block; filter: none; }
+    .polaroid .caption {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 0.9rem; color: var(--teal);
+      text-align: center; margin-top: 0.8rem;
+    }
+
+    /* ─── KLITMØLLER ──────────────────────────────────────── */
+    #klitmoller { background: var(--cloud); }
+    .klit-intro { max-width: 700px; margin-bottom: 2.5rem; }
+    .klit-intro p {
+      font-size: 1rem; font-style: italic;
+      border-left: 4px solid var(--teal);
+      padding-left: 1rem;
+      color: #1a4a5a;
+    }
+    .klit-cards {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border: 3px solid var(--ink);
+    }
+    .klit-card {
+      padding: 2rem 1.8rem;
+      border-right: 3px solid var(--ink);
+      border-bottom: 3px solid var(--ink);
+      background: var(--cloud);
+      transition: background 0.2s;
+      position: relative;
+    }
+    .klit-card:hover { background: #e8e4de; }
+    .klit-card:nth-child(even) { border-right: none; }
+    .klit-card:last-child {
+      grid-column: 1 / -1;
+      border-right: none; border-bottom: none;
+    }
+    .klit-card-num {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 3.5rem; color: rgba(27,99,122,0.1);
+      position: absolute; top: 0.5rem; right: 1rem;
+      line-height: 1;
+    }
+    .klit-card h3 { color: var(--red); font-size: 1rem; margin-bottom: 0.5rem; }
+    .klit-card p { font-size: 0.88rem; color: #1a4a5a; }
+
+    /* ─── MAP ─────────────────────────────────────────────── */
+    #map-section { background: var(--sand); }
+    .map-layout {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 3rem; align-items: start;
+    }
+    .map-facts {
+      margin-top: 1.5rem;
+      border: 3px solid var(--ink);
+      background: var(--cloud);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+    .fact-row {
+      display: flex; border-bottom: 2px solid var(--ink);
+    }
+    .fact-row:last-child { border-bottom: none; }
+    .fact-key {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      font-weight: 700; color: var(--cloud);
+      background: var(--teal);
+      padding: 0.6rem 0.8rem;
+      border-right: 2px solid var(--ink);
+      min-width: 110px;
+    }
+    .fact-val {
+      font-size: 0.85rem; color: #1a4a5a;
+      padding: 0.6rem 0.9rem;
+      font-family: 'Courier Prime', monospace;
+    }
+    .map-embed {
+      border: 3px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink);
+      position: relative;
+    }
+    .map-embed::before {
+      content: '📍 KLITMØLLER, DENMARK';
+      display: block;
+      background: var(--teal); color: var(--cloud);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 0.5rem 0.8rem;
+      border-bottom: 2px solid var(--ink);
+    }
+    .map-embed iframe {
+      width: 100%; height: 340px; display: block; border: none;
+      filter: none;
+    }
+
+    /* ─── LANDSCAPE BANNER ────────────────────────────────── */
+    #landscape {
+      padding: 0; position: relative; overflow: hidden; height: 380px;
+      border-top: 4px solid var(--ink); border-bottom: 4px solid var(--ink);
+    }
+    #landscape img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(1.0) saturate(1.0);
+    }
+    #landscape .overlay-text {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 2rem;
+    }
+    #landscape .big-quote {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(1.6rem, 4vw, 3.5rem);
+      color: #fff;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.85), -1px -1px 0 rgba(0,0,0,0.6);
+      max-width: 860px; line-height: 1.15;
+    }
+    #landscape .big-quote em { color: var(--orange); font-style: normal; }
+    #landscape .quote-src {
+      margin-top: 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+
+    /* ─── GUITAR SOLOS ────────────────────────────────────── */
+    #solos { background: var(--teal); }
+    .solos-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: start;
+    }
+    .solo-cards { display: flex; flex-direction: column; gap: 0; margin-top: 1.5rem; }
+    .solo-card {
+      padding: 1.4rem 1.6rem;
+      border: 3px solid rgba(255,255,255,0.5);
+      border-bottom: none;
+      background: rgba(255,255,255,0.12);
+    }
+    .solo-card:last-child { border-bottom: 3px solid rgba(255,255,255,0.5); }
+    .solo-time {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 2rem; color: var(--orange);
+      text-shadow: 2px 2px 0 var(--ink);
+      margin-bottom: 0.2rem;
+    }
+    .solo-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: #d0eef8; margin-bottom: 0.6rem;
+    }
+    .solo-card p { font-size: 0.85rem; color: rgba(255,255,255,0.9); margin-bottom: 0; }
+    /* polaroid guitar */
+    .polaroid-guitar {
+      background: var(--cloud);
+      padding: 0.8rem 0.8rem 2.2rem;
+      border: 2px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink);
+      transform: rotate(1.8deg);
+    }
+    .polaroid-guitar img { width: 100%; display: block; filter: none; }
+    .polaroid-guitar .caption {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 0.88rem; color: var(--teal);
+      text-align: center; margin-top: 0.7rem;
+    }
+
+    /* ─── LYRICS ──────────────────────────────────────────── */
+    #lyrics { background: var(--sand); }
+    .lyrics-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border: 3px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink);
+      background: var(--cloud);
+    }
+    .lyrics-col { display: flex; flex-direction: column; }
+    .lyrics-col:first-child { border-right: 3px solid var(--ink); }
+    .lyric-block {
+      padding: 1.5rem 1.8rem;
+      border-bottom: 2px solid rgba(27,99,122,0.2);
+    }
+    .lyric-block:last-child { border-bottom: none; }
+    .lyric-section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 0.15rem; font-weight: 700;
+    }
+    .lyric-timestamp {
+      font-size: 0.7rem; color: var(--sky);
+      margin-bottom: 0.7rem;
+      font-family: 'Space Mono', monospace;
+    }
+    .lyric-lines {
+      font-size: 0.92rem; line-height: 1.9;
+      color: #1a4a5a; font-style: italic;
+      font-family: 'Courier Prime', monospace;
+    }
+    .lyric-lines.chorus {
+      color: var(--ink); font-style: normal; font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .lyric-solo {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+      font-weight: 700; color: var(--orange);
+      border: 2px dashed var(--orange);
+      padding: 0.4rem 0.9rem;
+      background: rgba(250,100,54,0.07);
+    }
+
+    /* ─── LOVE LETTER ─────────────────────────────────────── */
+    #love-letter { background: var(--sand); }
+    .love-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
+    }
+    /* paper note effect */
+    .paper-note {
+      background: var(--cloud);
+      border: 2px solid var(--ink);
+      padding: 2.2rem 2rem;
+      box-shadow: 8px 8px 0 var(--ink);
+      transform: rotate(0.8deg);
+      position: relative;
+    }
+    .paper-note::before {
+      content: '';
+      position: absolute; top: 0; left: 2rem;
+      width: 1px; height: 100%;
+      background: rgba(194,54,55,0.3);
+    }
+    .paper-note h2 { font-size: 2rem; }
+    .paper-note p { color: #1a4a5a; font-size: 0.9rem; }
+    blockquote.pull-quote {
+      border-left: 4px solid var(--red);
+      padding: 0.8rem 1rem;
+      margin: 1.2rem 0;
+      font-style: italic;
+      color: var(--teal);
+      background: rgba(43,143,173,0.08);
+      font-size: 0.95rem;
+    }
+    .polaroid-surfer {
+      background: var(--cloud);
+      padding: 0.8rem 0.8rem 2.5rem;
+      border: 2px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink);
+      transform: rotate(-1.5deg);
+    }
+    .polaroid-surfer img { width: 100%; display: block; filter: none; }
+    .polaroid-surfer .caption {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 0.9rem; color: var(--teal);
+      text-align: center; margin-top: 0.8rem;
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────────── */
+    footer {
+      background: var(--teal);
+      border-top: 4px solid var(--ink);
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+    }
+    .footer-title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(2rem, 5vw, 4rem);
+      color: var(--cloud);
+      text-shadow: 3px 3px 0 var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .footer-sub {
+      font-family: 'Courier Prime', monospace;
+      font-style: italic;
+      color: rgba(255,255,255,0.75); font-size: 0.88rem;
+      margin-bottom: 2rem;
+    }
+    .footer-cta { margin-bottom: 2.5rem; }
+    .social-links {
+      display: flex; gap: 1.5rem; justify-content: center;
+      list-style: none; margin-bottom: 2.5rem; flex-wrap: wrap;
+    }
+    .social-links a {
+      color: var(--sky); text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .social-links a:hover { color: var(--orange); border-bottom-color: var(--orange); }
+    .footer-divider {
+      width: 100%; height: 2px;
+      background: rgba(255,255,255,0.1); margin-bottom: 1.5rem;
+    }
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem; color: rgba(255,255,255,0.55);
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 820px) {
+      .nav-links { display: none; }
+      .about-grid, .solos-layout, .love-layout, .map-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .klit-cards { grid-template-columns: 1fr; }
+      .klit-card { border-right: none; }
+      .klit-card:last-child { border-bottom: none; }
+      .lyrics-layout { grid-template-columns: 1fr; }
+      .lyrics-col:first-child { border-right: none; border-bottom: 3px solid var(--ink); }
+      .section { padding: 3rem 1.2rem; }
+      #landscape { height: 260px; }
+      .polaroid, .polaroid-guitar, .polaroid-surfer { transform: none; }
+      .paper-note { transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo">Cold Hawaii 🌊</div>
+  <ul class="nav-links">
+    <li><a href="#listen">Listen</a></li>
+    <li><a href="#about">The Song</a></li>
+    <li><a href="#klitmoller">Klitmøller</a></li>
+    <li><a href="#map-section">Map</a></li>
+    <li><a href="#solos">Guitar</a></li>
+    <li><a href="#lyrics">Lyrics</a></li>
+  </ul>
+</nav>
+
+<!-- ─── ASCII HEADER ─────────────────────────────────────── -->
+<div class="ascii-header">   *  .  . *       *    .        .
+      *   .    *       .   *    .    *
+    .    *      .   *      .      *     .
+       _..-''--'~_..-''--'~_..-''--'~_
+     ~_..-''--'~_..-''--'~_..-''--'~_..-
+      \ \ \  \ / / / / / / / / / / / / /
+       \ \ \ \/ / / / / / / / / / / / /
+        \ \ \/ / / / / / / / / / / / /
+         \ \/ / / / / / / / / / / / /
+          \/ / / / / / / / / / / / /
+                 K L I T M Ø L L E R</div>
+
+<!-- ─── HERO ──────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="bg"></div>
+  <div class="hero-inner">
+    <span class="hero-stamp">Klitmøller, Denmark · North Sea Anthem</span>
+    <h1 class="hero-title">
+      Surfing
+      <span class="line2">Cold Hawaii</span>
+    </h1>
+    <p class="hero-sub">A love letter to the raw, gritty, adrenaline-fueled reality of cold-water surfing — captured in hard rock.</p>
+    <div class="hero-ctas">
+      <a href="#listen" class="btn btn-orange">▶ Listen Now</a>
+      <a href="ColdHawaii.mp3" download class="btn btn-teal">⬇ Download Free</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CUSTOM CASSETTE PLAYER ───────────────────────────── -->
+<section id="listen" class="section">
+  <div class="container">
+    <div class="cassette-wrap">
+      <div class="section-tag">The Track</div>
+      <p class="cassette-title">Surfing Cold Hawaii</p>
+      <p class="cassette-sub">stream it. download it. play it loud on the way to the beach.</p>
+
+      <div class="cassette-player">
+        <div class="reels">
+          <div class="reel" id="reel-left"></div>
+          <div class="cassette-tape-label">SIDE A — COLD HAWAII</div>
+          <div class="reel" id="reel-right"></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-bar-bg" id="progress-bg">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+          </div>
+          <div class="time-display">
+            <span id="time-current">0:00</span>
+            <span id="time-total">--:--</span>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="ctrl-btn" id="btn-rw" title="Rewind 10s">⏮ -10s</button>
+          <button class="play-btn" id="btn-play">▶ PLAY</button>
+          <button class="ctrl-btn" id="btn-ff" title="Forward 10s">+10s ⏭</button>
+        </div>
+        <div class="volume-wrap">
+          <label for="vol-slider">VOL</label>
+          <input type="range" id="vol-slider" min="0" max="1" step="0.05" value="0.8" />
+        </div>
+      </div>
+
+      <audio id="native-audio" preload="metadata">
+        <source src="ColdHawaii.mp3" type="audio/mpeg" />
+      </audio>
+
+      <a href="ColdHawaii.mp3" download class="btn btn-orange">⬇ Download the Track (Free)</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT THE SONG ────────────────────────────────────── -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="polaroid">
+        <img src="images/hero_wave.jpg" alt="Massive North Sea wave at Cold Hawaii, Klitmøller" />
+        <div class="caption">Cold Hawaii — do or die</div>
+      </div>
+      <div>
+        <div class="section-tag">About the Song</div>
+        <h2>The Ultimate <span class="accent">Cold-Water</span> Surf Anthem</h2>
+        <p>"Surfing Cold Hawaii" is a high-energy, hard rock tribute to the untamed power of the North Sea — specifically inspired by the legendary surf spot in Klitmøller, Denmark.</p>
+        <p>Unlike the sunny, warm beaches of California, this song captures the gritty, adrenaline-fueled reality of cold-water surfing. With lyrics highlighting the <em>"steel grey ocean,"</em> <em>"freezing sun,"</em> and <em>"North Sea winds,"</em> it paints a vivid picture of athletes battling extreme elements.</p>
+        <p>The driving drum beats mirror the pounding of the waves, while the soaring vocals and shredding guitars represent the sheer, rebellious freedom of catching a massive wave. It's a song about camaraderie, facing your fears, and finding <em>"freedom in the rides."</em></p>
+        <p>Whether you're checking the surf forecast or hyping yourself up before pulling on a 6mm wetsuit in the freezing cold — this track is guaranteed to get your heart pounding.</p>
+        <a href="ColdHawaii.mp3" download class="btn btn-teal" style="margin-top:1.2rem;">⬇ Download MP3</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── KLITMØLLER ────────────────────────────────────────── -->
+<section id="klitmoller" class="section">
+  <div class="container">
+    <div class="section-tag">Klitmøller, Denmark</div>
+    <h2>The Place Behind <span class="accent">the Song</span></h2>
+    <div class="klit-intro">
+      <p>Klitmøller, once a fishing village, transformed into Cold Hawaii after surf discovery in the 1980s. Now hosts international competitions, blending fishing heritage and surfing culture.</p>
+    </div>
+
+    <div class="klit-cards">
+      <div class="klit-card">
+        <div class="klit-card-num">01</div>
+        <h3>What is Klitmøller?</h3>
+        <p>A small coastal town of roughly 800 inhabitants on the northwest tip of Denmark's Jutland Peninsula, facing the full force of the North Sea. Known worldwide as <strong>Cold Hawaii</strong>, it spans a wild 50&nbsp;km stretch of coastline through the Thy region — home to 31 distinct surf spots, long reef breaks, and some of the most powerful cold-water waves in Europe.</p>
+      </div>
+      <div class="klit-card">
+        <div class="klit-card-num">02</div>
+        <h3>History</h3>
+        <p>Once a thriving fishing and trading port between Denmark and Norway, Klitmøller fell into decline after its harbour was relocated in 1967. In the 1980s, a German windsurfer named Christian Dach stumbled upon its wild waves. By 1994, a documentary described the area as <em>"like Hawaii, just colder"</em> — and the name stuck. Today, fishermen and surfers share the same salty air in harmony.</p>
+      </div>
+      <div class="klit-card">
+        <div class="klit-card-num">03</div>
+        <h3>Cultural Importance</h3>
+        <p><strong>Scandinavia's surf mecca</strong> — where old-school fishermen and fearless surfers coexist, united by a shared love of the sea. It hosts the annual <strong>Cold Hawaii PWA World Cup</strong>, drawing elite windsurfers and surfers from across the globe. The surf club is housed in a historic lobster house; the sauna on the beach was built by fishermen's wives. Klitmøller is not just a surf spot — it is a living, breathing community that chose the ocean over decline, and won.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MAP ───────────────────────────────────────────────── -->
+<section id="map-section" class="section">
+  <div class="container">
+    <div class="map-layout">
+      <div>
+        <div class="section-tag">Where is it?</div>
+        <h2>Find <span class="accent">Klitmøller</span></h2>
+        <p>Klitmøller sits on the northwest coast of Denmark's Jutland Peninsula, within the protected Thy National Park. Its high latitude — the same as Juneau, Alaska — means powerful Atlantic storms pass directly overhead, delivering the raw, consistent swells that define Cold Hawaii.</p>
+        <div class="map-facts">
+          <div class="fact-row"><div class="fact-key">Region</div><div class="fact-val">Thy, Northwest Jutland, Denmark</div></div>
+          <div class="fact-row"><div class="fact-key">Surf Spots</div><div class="fact-val">31 spots — Agger to Vigsø</div></div>
+          <div class="fact-row"><div class="fact-key">Water Temp</div><div class="fact-val">4–17°C year-round</div></div>
+          <div class="fact-row"><div class="fact-key">Best Season</div><div class="fact-val">Autumn &amp; Winter swells</div></div>
+          <div class="fact-row"><div class="fact-key">Nearest City</div><div class="fact-val">Thisted (~20 km)</div></div>
+          <div class="fact-row"><div class="fact-key">Competitions</div><div class="fact-val">Cold Hawaii PWA World Cup</div></div>
+        </div>
+      </div>
+      <div class="map-embed">
+        <iframe
+          src="https://www.openstreetmap.org/export/embed.html?bbox=8.3,57.0,8.7,57.2&layer=mapnik&marker=57.1,8.49"
+          loading="lazy" title="Map of Klitmøller, Denmark" allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LANDSCAPE BANNER ──────────────────────────────────── -->
+<div id="landscape">
+  <img src="images/klitmoller_landscape.jpg" alt="Aerial view of Klitmøller coastline" />
+  <div class="overlay-text">
+    <p class="big-quote">"Steel grey ocean everywhere —<br><em>North Sea burning in our veins"</em></p>
+    <p class="quote-src">— Surfing Cold Hawaii</p>
+  </div>
+</div>
+
+<!-- ─── GUITAR SOLOS ──────────────────────────────────────── -->
+<section id="solos" class="section">
+  <div class="container">
+    <div class="solos-layout">
+      <div>
+        <div class="section-tag" style="background:var(--red);">For the Rock Fans</div>
+        <h2 style="color:var(--cloud);">Catch the <span class="accent">Shred</span></h2>
+        <p style="color:rgba(244,246,246,0.7);">You can't have a track about the wild ocean without some wild guitars. For the gearheads, rock enthusiasts, and air-guitar champions — here is exactly when the fretboard catches fire.</p>
+        <div class="solo-cards">
+          <div class="solo-card">
+            <div class="solo-time">2:01 — 2:30</div>
+            <div class="solo-name">Main Guitar Solo — The Main Drop</div>
+            <p>Right after the explosive chorus, the lead guitar takes over with a blistering, face-melting solo that perfectly captures the chaos and thrill of a heavy wave crashing down.</p>
+          </div>
+          <div class="solo-card">
+            <div class="solo-time">3:22 — End</div>
+            <div class="solo-name">Outro Solo — The Fade Out</div>
+            <p>The lead guitar returns to weave through the final vocal wails of <em>"Cold Hawaii!"</em>, driving the song home to a heavy, crashing finale — just like the ocean reclaiming the shore.</p>
+          </div>
+        </div>
+      </div>
+      <div class="polaroid-guitar">
+        <img src="images/guitar_rock.jpg" alt="Electric guitar" />
+        <div class="caption">shred the wave</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LYRICS ────────────────────────────────────────────── -->
+<section id="lyrics" class="section">
+  <div class="container">
+    <div class="section-tag">Official Lyrics</div>
+    <h2>Sing It <span class="accent">Loud</span></h2>
+    <p style="margin-bottom:2rem; font-style:italic;">Memorize the words before your next session in the water.</p>
+
+    <div class="lyrics-layout">
+      <div class="lyrics-col">
+        <div class="lyric-block">
+          <div class="lyric-section-title">Intro</div>
+          <div class="lyric-timestamp">0:00 – 0:25</div>
+          <div class="lyric-lines">North Sea winds<br>Cold water<br>Washed right in<br>Cold and biting</div>
+        </div>
+        <div class="lyric-block">
+          <div class="lyric-section-title">Verse 1</div>
+          <div class="lyric-timestamp">0:43</div>
+          <div class="lyric-lines">Cold wind screaming through my hair<br>Steel grey ocean everywhere<br>Sand and salt beneath my feet<br>Heart is pounding to the beat</div>
+        </div>
+        <div class="lyric-block">
+          <div class="lyric-section-title">Pre-Chorus</div>
+          <div class="lyric-timestamp">0:59</div>
+          <div class="lyric-lines">Board in hand I hit the run<br>Northern fire, freezing sun<br>Waves are rising dark and high<br>Cold Hawaii, do or die!</div>
+        </div>
+        <div class="lyric-block">
+          <div class="lyric-section-title">Chorus</div>
+          <div class="lyric-timestamp">1:15</div>
+          <div class="lyric-lines chorus">Battle out, feel the power<br>This is our electric hour<br>Surfing Cold Hawaii!<br>Riding thunder in the sky<br>Wild waves crashing, spirits high<br>Take the board and fly<br>Surfing Cold Hawaii!<br>North Sea burning in our veins<br>Salt and sand and rebel tides<br>Freedom in the rides</div>
+        </div>
+      </div>
+      <div class="lyrics-col">
+        <div class="lyric-block">
+          <div class="lyric-section-title">Guitar Solo</div>
+          <div class="lyric-timestamp">2:01 – 2:30</div>
+          <span class="lyric-solo">♬ Guitar Solo — Face-Melting Shred</span>
+        </div>
+        <div class="lyric-block">
+          <div class="lyric-section-title">Verse 2</div>
+          <div class="lyric-timestamp">2:58</div>
+          <div class="lyric-lines">Bold jumps flying through the spray<br>Crowds are roaring on the bay<br>Competition in the air<br>Fearless hearts that just don't care<br>Four friends stand again<br>Storm and water, wind and rain</div>
+        </div>
+        <div class="lyric-block">
+          <div class="lyric-section-title">Outro / Guitar Solo 2</div>
+          <div class="lyric-timestamp">3:22</div>
+          <span class="lyric-solo">♬ Outro Guitar Solo</span>
+          <div class="lyric-lines chorus" style="margin-top:1rem;">
+            Cold Hawaii!<br>
+            <span style="opacity:0.5;font-size:0.82em;font-weight:400;font-style:italic;">(3:48)</span><br>
+            Cold Hawaii!<br>
+            <span style="opacity:0.45;font-size:0.8em;font-weight:400;font-style:italic;">(Heavy instrumental fade out)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LOVE LETTER ───────────────────────────────────────── -->
+<section id="love-letter" class="section">
+  <div class="container">
+    <div class="love-layout">
+      <div class="paper-note">
+        <div class="section-tag">Why Klitmøller?</div>
+        <h2>A Love Letter to the <span class="accent">North Sea</span></h2>
+        <p>To the untrained eye, it's just a windy, freezing stretch of the Danish coastline in Thy. But to those of us who have stood on that sand, board in hand, staring down the roaring grey swells — it is heaven on earth.</p>
+        <blockquote class="pull-quote">"I wrote 'Surfing Cold Hawaii' because I wanted to capture the soul of Klitmøller. There are a million songs about surfing in sunny California or tropical islands, but there was nothing that captured the raw, grit-your-teeth, adrenaline-fueled reality of surfing the North Sea."</blockquote>
+        <p>This song is a love letter to the freezing sun, the biting winds, and the fearless community of surfers who ride the dark waters of Cold Hawaii. It's for the days when the rain is stinging your face, your hands are numb, but the camaraderie and the thrill of the wave make you feel more alive than ever.</p>
+        <p>If you love Klitmøller as much as I do, this anthem is for you.</p>
+      </div>
+      <div class="polaroid-surfer">
+        <img src="images/surfer_wetsuit.jpg" alt="Surfer in wetsuit at Klitmøller" />
+        <div class="caption">5°C and worth it</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <p class="footer-title">Take the North Sea With You.</p>
+    <p class="footer-sub">Add it to your playlist, share it with your surf crew, and play it loud the next time you drive up the coast to Thy.</p>
+    <div class="footer-cta">
+      <a href="ColdHawaii.mp3" download class="btn btn-orange">⬇ Download the Track for Free Now</a>
+    </div>
+    <ul class="social-links">
+      <li><a href="#">Instagram</a></li>
+      <li><a href="#">YouTube</a></li>
+      <li><a href="#">Spotify</a></li>
+      <li><a href="#">Share to Facebook</a></li>
+    </ul>
+    <div class="footer-divider"></div>
+    <p class="footer-copy">Coded with cold hands and strong coffee in Klitmøller. &nbsp;|&nbsp; Dedicated to the surfers of Cold Hawaii. &nbsp;|&nbsp; © 2026</p>
+  </div>
+</footer>
+
+<!-- ─── CUSTOM PLAYER JS ──────────────────────────────────── -->
+<script>
+  const audio = document.getElementById('native-audio');
+  const btnPlay = document.getElementById('btn-play');
+  const btnRw = document.getElementById('btn-rw');
+  const btnFf = document.getElementById('btn-ff');
+  const progressBg = document.getElementById('progress-bg');
+  const progressFill = document.getElementById('progress-fill');
+  const timeCurrent = document.getElementById('time-current');
+  const timeTotal = document.getElementById('time-total');
+  const volSlider = document.getElementById('vol-slider');
+  const reelL = document.getElementById('reel-left');
+  const reelR = document.getElementById('reel-right');
+
+  function fmt(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  audio.addEventListener('loadedmetadata', () => {
+    timeTotal.textContent = fmt(audio.duration);
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+    progressFill.style.width = pct + '%';
+    timeCurrent.textContent = fmt(audio.currentTime);
+  });
+
+  audio.addEventListener('ended', () => {
+    btnPlay.textContent = '▶ PLAY';
+    reelL.classList.remove('spinning');
+    reelR.classList.remove('spinning');
+  });
+
+  btnPlay.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      btnPlay.textContent = '⏸ PAUSE';
+      reelL.classList.add('spinning');
+      reelR.classList.add('spinning');
+    } else {
+      audio.pause();
+      btnPlay.textContent = '▶ PLAY';
+      reelL.classList.remove('spinning');
+      reelR.classList.remove('spinning');
+    }
+  });
+
+  btnRw.addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime - 10); });
+  btnFf.addEventListener('click', () => { audio.currentTime = Math.min(audio.duration, audio.currentTime + 10); });
+
+  progressBg.addEventListener('click', (e) => {
+    const rect = progressBg.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pct * audio.duration;
+  });
+
+  volSlider.addEventListener('input', () => { audio.volume = volSlider.value; });
+  audio.volume = 0.8;
+</script>
+
+</body>
+</html>
