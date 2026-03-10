@@ -40,9 +40,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      background-color: var(--sand);
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-color: #ffffff;
       color: var(--teal);
       font-family: 'Courier Prime', monospace;
       font-size: 15px;
@@ -53,8 +51,8 @@
     /* ─── NAV ─────────────────────────────────────────────── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: var(--teal-dark);
-      border-bottom: 3px solid var(--ink);
+      background: #ffffff;
+      border-bottom: 2px solid #e8e8e8;
       padding: 0.7rem 1.5rem;
       display: flex; align-items: center; justify-content: space-between;
       flex-wrap: wrap; gap: 0.5rem;
@@ -67,7 +65,7 @@
     }
     .nav-links { display: flex; gap: 1.4rem; list-style: none; flex-wrap: wrap; }
     .nav-links a {
-      color: var(--cloud); text-decoration: none;
+      color: var(--ink); text-decoration: none;
       font-family: 'Space Mono', monospace;
       font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
       border-bottom: 2px solid transparent;
@@ -75,19 +73,7 @@
     }
     .nav-links a:hover { color: var(--orange); border-bottom-color: var(--orange); }
 
-    /* ─── ASCII HEADER ────────────────────────────────────── */
-    .ascii-header {
-      background: #1a5f73;
-      color: var(--sky);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.62rem;
-      line-height: 1.2;
-      padding: 1rem 1.5rem;
-      white-space: pre;
-      overflow-x: auto;
-      border-bottom: 3px solid var(--ink);
-      text-align: center;
-    }
+
 
     /* ─── HERO ────────────────────────────────────────────── */
     #hero {
@@ -178,7 +164,7 @@
     /* ─── SECTION WRAPPERS ────────────────────────────────── */
     .section {
       padding: 4rem 1.5rem;
-      border-bottom: 3px solid var(--ink);
+      border-bottom: 3px solid #e8e8e8;
     }
     .container { max-width: 1060px; margin: 0 auto; }
 
@@ -186,11 +172,11 @@
       display: inline-block;
       font-family: 'Space Mono', monospace;
       font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
-      color: var(--cloud);
-      background: var(--teal);
+      color: var(--teal);
+      background: transparent;
       padding: 0.2rem 0.6rem;
       margin-bottom: 0.8rem;
-      border: 2px solid var(--ink);
+      border: 2px solid var(--teal);
     }
     h2 {
       font-family: 'Permanent Marker', cursive;
@@ -209,7 +195,7 @@
     p:last-child { margin-bottom: 0; }
 
     /* ─── CUSTOM AUDIO PLAYER ─────────────────────────────── */
-    #listen { background: var(--teal); border-bottom: 4px solid var(--ink); }
+    #listen { background: #ffffff; border-bottom: 3px solid #e8e8e8; }
     .cassette-wrap {
       max-width: 680px; margin: 0 auto;
       text-align: center;
@@ -224,12 +210,12 @@
     .cassette-sub {
       font-family: 'Courier Prime', monospace;
       font-style: italic; font-size: 0.88rem;
-      color: rgba(255,255,255,0.8);
+      color: var(--ink);
       margin-bottom: 2rem;
     }
     /* the player shell */
     .cassette-player {
-      background: #1a4f60;
+      background: #f0f8fc;
       border: 3px solid var(--ink);
       box-shadow: 8px 8px 0 var(--ink);
       padding: 1.5rem 1.8rem 1.8rem;
@@ -241,10 +227,10 @@
       display: block;
       font-family: 'Space Mono', monospace;
       font-size: 0.6rem; letter-spacing: 0.3em;
-      color: var(--sky);
+      color: var(--teal);
       text-align: center;
       margin-bottom: 1rem;
-      border-bottom: 1px solid rgba(115,182,206,0.3);
+      border-bottom: 1px solid rgba(43,143,173,0.3);
       padding-bottom: 0.6rem;
     }
     /* reels */
@@ -255,8 +241,8 @@
     .reel {
       width: 52px; height: 52px;
       border-radius: 50%;
-      border: 3px solid var(--sky);
-      background: #0d3040;
+      border: 3px solid var(--teal);
+      background: #d0eaf4;
       position: relative;
       transition: transform 0.1s;
     }
@@ -272,7 +258,7 @@
       transform: translate(-50%,-50%);
       width: 10px; height: 10px;
       border-radius: 50%;
-      background: var(--sky);
+      background: var(--teal);
     }
     .reel.spinning {
       animation: spin 1.2s linear infinite;
@@ -280,7 +266,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .cassette-tape-label {
       font-family: 'Space Mono', monospace;
-      font-size: 0.62rem; color: rgba(200,235,245,0.8);
+      font-size: 0.62rem; color: var(--teal);
       letter-spacing: 0.15em; text-align: center;
     }
     /* progress */
@@ -290,8 +276,8 @@
     }
     .progress-bar-bg {
       width: 100%; height: 8px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(115,182,206,0.3);
+      background: rgba(43,143,173,0.1);
+      border: 1px solid rgba(43,143,173,0.3);
       cursor: pointer;
       position: relative;
     }
@@ -305,7 +291,7 @@
     .time-display {
       display: flex; justify-content: space-between;
       font-family: 'Space Mono', monospace;
-      font-size: 0.65rem; color: rgba(200,235,245,0.9);
+      font-size: 0.65rem; color: var(--teal);
       margin-top: 0.3rem;
     }
     /* controls */
@@ -314,13 +300,13 @@
       gap: 1rem; margin-top: 1rem;
     }
     .ctrl-btn {
-      background: none; border: 2px solid rgba(115,182,206,0.4);
-      color: var(--sky); cursor: pointer;
+      background: none; border: 2px solid rgba(43,143,173,0.4);
+      color: var(--teal); cursor: pointer;
       font-family: 'Space Mono', monospace;
       font-size: 0.7rem; padding: 0.4rem 0.8rem;
       transition: all 0.15s;
     }
-    .ctrl-btn:hover { border-color: var(--sky); color: var(--cloud); }
+    .ctrl-btn:hover { border-color: var(--teal); color: var(--ink); }
     .play-btn {
       background: var(--orange); border: 3px solid var(--ink);
       color: var(--ink); cursor: pointer;
@@ -336,13 +322,13 @@
     }
     .volume-wrap label {
       font-family: 'Space Mono', monospace;
-      font-size: 0.6rem; color: rgba(200,235,245,0.9);
+      font-size: 0.6rem; color: var(--teal);
       letter-spacing: 0.1em;
     }
     input[type=range] {
       -webkit-appearance: none;
       width: 90px; height: 4px;
-      background: rgba(115,182,206,0.3);
+      background: rgba(43,143,173,0.2);
       outline: none; cursor: pointer;
     }
     input[type=range]::-webkit-slider-thumb {
@@ -355,13 +341,13 @@
     #native-audio { display: none; }
 
     /* ─── ABOUT ───────────────────────────────────────────── */
-    #about { background: var(--sand); }
+    #about { background: #ffffff; }
     .about-grid {
       display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: start;
     }
     /* polaroid photo */
     .polaroid {
-      background: var(--cloud);
+      background: #ffffff;
       padding: 0.9rem 0.9rem 2.5rem;
       border: 2px solid var(--ink);
       box-shadow: 8px 8px 0 var(--ink);
@@ -377,7 +363,7 @@
     }
 
     /* ─── KLITMØLLER ──────────────────────────────────────── */
-    #klitmoller { background: var(--cloud); }
+    #klitmoller { background: #ffffff; }
     .klit-intro { max-width: 700px; margin-bottom: 2.5rem; }
     .klit-intro p {
       font-size: 1rem; font-style: italic;
@@ -393,11 +379,11 @@
       padding: 2rem 1.8rem;
       border-right: 3px solid var(--ink);
       border-bottom: 3px solid var(--ink);
-      background: var(--cloud);
+      background: #ffffff;
       transition: background 0.2s;
       position: relative;
     }
-    .klit-card:hover { background: #e8e4de; }
+    .klit-card:hover { background: #f5f9fb; }
     .klit-card:nth-child(even) { border-right: none; }
     .klit-card:last-child {
       grid-column: 1 / -1;
@@ -413,14 +399,14 @@
     .klit-card p { font-size: 0.88rem; color: #1a4a5a; }
 
     /* ─── MAP ─────────────────────────────────────────────── */
-    #map-section { background: var(--sand); }
+    #map-section { background: #ffffff; }
     .map-layout {
       display: grid; grid-template-columns: 1fr 1.4fr; gap: 3rem; align-items: start;
     }
     .map-facts {
       margin-top: 1.5rem;
       border: 3px solid var(--ink);
-      background: var(--cloud);
+      background: #ffffff;
       box-shadow: 5px 5px 0 var(--ink);
     }
     .fact-row {
@@ -492,18 +478,18 @@
     }
 
     /* ─── GUITAR SOLOS ────────────────────────────────────── */
-    #solos { background: var(--teal); }
+    #solos { background: #ffffff; }
     .solos-layout {
       display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: start;
     }
     .solo-cards { display: flex; flex-direction: column; gap: 0; margin-top: 1.5rem; }
     .solo-card {
       padding: 1.4rem 1.6rem;
-      border: 3px solid rgba(255,255,255,0.5);
+      border: 3px solid var(--teal);
       border-bottom: none;
-      background: rgba(255,255,255,0.12);
+      background: #f0f8fc;
     }
-    .solo-card:last-child { border-bottom: 3px solid rgba(255,255,255,0.5); }
+    .solo-card:last-child { border-bottom: 3px solid var(--teal); }
     .solo-time {
       font-family: 'Permanent Marker', cursive;
       font-size: 2rem; color: var(--orange);
@@ -513,12 +499,12 @@
     .solo-name {
       font-family: 'Space Mono', monospace;
       font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
-      color: #d0eef8; margin-bottom: 0.6rem;
+      color: var(--teal); margin-bottom: 0.6rem;
     }
-    .solo-card p { font-size: 0.85rem; color: rgba(255,255,255,0.9); margin-bottom: 0; }
+    .solo-card p { font-size: 0.85rem; color: var(--ink); margin-bottom: 0; }
     /* polaroid guitar */
     .polaroid-guitar {
-      background: var(--cloud);
+      background: #ffffff;
       padding: 0.8rem 0.8rem 2.2rem;
       border: 2px solid var(--ink);
       box-shadow: 8px 8px 0 var(--ink);
@@ -532,12 +518,12 @@
     }
 
     /* ─── LYRICS ──────────────────────────────────────────── */
-    #lyrics { background: var(--sand); }
+    #lyrics { background: #ffffff; }
     .lyrics-layout {
       display: grid; grid-template-columns: 1fr 1fr; gap: 0;
       border: 3px solid var(--ink);
       box-shadow: 8px 8px 0 var(--ink);
-      background: var(--cloud);
+      background: #ffffff;
     }
     .lyrics-col { display: flex; flex-direction: column; }
     .lyrics-col:first-child { border-right: 3px solid var(--ink); }
@@ -576,13 +562,13 @@
     }
 
     /* ─── LOVE LETTER ─────────────────────────────────────── */
-    #love-letter { background: var(--sand); }
+    #love-letter { background: #ffffff; }
     .love-layout {
       display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
     }
     /* paper note effect */
     .paper-note {
-      background: var(--cloud);
+      background: #ffffff;
       border: 2px solid var(--ink);
       padding: 2.2rem 2rem;
       box-shadow: 8px 8px 0 var(--ink);
@@ -603,11 +589,11 @@
       margin: 1.2rem 0;
       font-style: italic;
       color: var(--teal);
-      background: rgba(43,143,173,0.08);
+      background: #f0f8fc;
       font-size: 0.95rem;
     }
     .polaroid-surfer {
-      background: var(--cloud);
+      background: #ffffff;
       padding: 0.8rem 0.8rem 2.5rem;
       border: 2px solid var(--ink);
       box-shadow: 8px 8px 0 var(--ink);
@@ -622,22 +608,22 @@
 
     /* ─── FOOTER ──────────────────────────────────────────── */
     footer {
-      background: var(--teal);
-      border-top: 4px solid var(--ink);
+      background: #ffffff;
+      border-top: 3px solid #e8e8e8;
       padding: 4rem 1.5rem 3rem;
       text-align: center;
     }
     .footer-title {
       font-family: 'Permanent Marker', cursive;
       font-size: clamp(2rem, 5vw, 4rem);
-      color: var(--cloud);
+      color: var(--ink);
       text-shadow: 3px 3px 0 var(--ink);
       margin-bottom: 0.5rem;
     }
     .footer-sub {
       font-family: 'Courier Prime', monospace;
       font-style: italic;
-      color: rgba(255,255,255,0.75); font-size: 0.88rem;
+      color: var(--ink); font-size: 0.88rem;
       margin-bottom: 2rem;
     }
     .footer-cta { margin-bottom: 2.5rem; }
@@ -646,7 +632,7 @@
       list-style: none; margin-bottom: 2.5rem; flex-wrap: wrap;
     }
     .social-links a {
-      color: var(--sky); text-decoration: none;
+      color: var(--teal); text-decoration: none;
       font-family: 'Space Mono', monospace;
       font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
       border-bottom: 1px solid transparent;
@@ -655,11 +641,11 @@
     .social-links a:hover { color: var(--orange); border-bottom-color: var(--orange); }
     .footer-divider {
       width: 100%; height: 2px;
-      background: rgba(255,255,255,0.1); margin-bottom: 1.5rem;
+      background: #e8e8e8; margin-bottom: 1.5rem;
     }
     .footer-copy {
       font-family: 'Space Mono', monospace;
-      font-size: 0.68rem; color: rgba(255,255,255,0.55);
+      font-size: 0.68rem; color: rgba(27,43,47,0.5);
       letter-spacing: 0.08em;
     }
 
@@ -694,18 +680,7 @@
   </ul>
 </nav>
 
-<!-- ─── ASCII HEADER ─────────────────────────────────────── -->
-<div class="ascii-header">   *  .  . *       *    .        .
-      *   .    *       .   *    .    *
-    .    *      .   *      .      *     .
-       _..-''--'~_..-''--'~_..-''--'~_
-     ~_..-''--'~_..-''--'~_..-''--'~_..-
-      \ \ \  \ / / / / / / / / / / / / /
-       \ \ \ \/ / / / / / / / / / / / /
-        \ \ \/ / / / / / / / / / / / /
-         \ \/ / / / / / / / / / / / /
-          \/ / / / / / / / / / / / /
-                 K L I T M Ø L L E R</div>
+
 
 <!-- ─── HERO ──────────────────────────────────────────────── -->
 <section id="hero">
