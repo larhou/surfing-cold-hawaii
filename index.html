@@ -1609,19 +1609,18 @@
   document.getElementById('hero-now-playing').addEventListener('click', () => {
     const listenSection = document.getElementById('listen');
     listenSection.scrollIntoView({ behavior: 'smooth' });
-    // Try to play immediately (works if user has already interacted)
-    const tryPlay = () => {
+    // Wait for smooth scroll to finish (~700ms), then play
+    setTimeout(() => {
       if (audio.paused) {
         audio.play().then(() => {
           btnPlay.textContent = '⏸ PAUSE';
           document.querySelectorAll('.reel').forEach(r => r.style.animationPlayState = 'running');
         }).catch(() => {
-          // If blocked, click the play button after scroll completes
-          setTimeout(() => btnPlay.click(), 700);
+          // Fallback: simulate a click on the play button
+          btnPlay.click();
         });
       }
-    };
-    tryPlay();
+    }, 750);
   });
 
   // Global function for solo card click-to-play
