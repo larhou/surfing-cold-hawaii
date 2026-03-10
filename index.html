@@ -401,6 +401,85 @@
     /* hidden native audio */
     #native-audio { display: none; }
 
+    /* ─── SOLO MARKER ────────────────────────────────────── */
+    .solo-marker {
+      position: absolute;
+      /* 2:01 = 121s out of 253s total = ~47.8% */
+      left: 47.8%;
+      top: -2px;
+      transform: translateX(-50%);
+      z-index: 10;
+      cursor: pointer;
+    }
+    .solo-marker-pin {
+      width: 3px;
+      height: 14px;
+      background: var(--orange);
+      margin: 0 auto;
+      position: relative;
+    }
+    .solo-marker-pin::before {
+      content: '🎸';
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1rem;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+      animation: guitar-bounce 1.8s ease-in-out infinite;
+    }
+    @keyframes guitar-bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(-4px); }
+    }
+    .solo-marker-label {
+      position: absolute;
+      top: -68px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      background: var(--ink);
+      color: var(--orange);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.7rem;
+      border: 2px solid var(--orange);
+      box-shadow: 3px 3px 0 var(--orange);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .solo-marker-label::after {
+      content: '';
+      position: absolute;
+      bottom: -7px; left: 50%;
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--orange);
+    }
+    .solo-marker:hover .solo-marker-label,
+    .solo-marker-label.always-show {
+      opacity: 1;
+    }
+    /* pulse ring around the pin */
+    .solo-marker-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--orange);
+      animation: ring-pulse 2s ease-out infinite;
+      pointer-events: none;
+    }
+    @keyframes ring-pulse {
+      0%   { transform: translate(-50%,-50%) scale(0.6); opacity: 1; }
+      100% { transform: translate(-50%,-50%) scale(2.2); opacity: 0; }
+    }
+
     /* ─── ABOUT ───────────────────────────────────────────── */
     #about { background: #ffffff; }
     .about-grid {
@@ -786,6 +865,12 @@
         <div class="progress-wrap">
           <div class="progress-bar-bg" id="progress-bg">
             <div class="progress-bar-fill" id="progress-fill"></div>
+            <!-- Guitar Solo Marker at 2:01 -->
+            <div class="solo-marker" id="solo-marker" title="Jump to Guitar Solo">
+              <div class="solo-marker-ring"></div>
+              <div class="solo-marker-pin"></div>
+              <div class="solo-marker-label" id="solo-label">🎸 Wild guitar — rides like the waves</div>
+            </div>
           </div>
           <div class="time-display">
             <span id="time-current">0:00</span>
@@ -1125,6 +1210,32 @@
 
   volSlider.addEventListener('input', () => { audio.volume = volSlider.value; });
   audio.volume = 0.8;
+
+  // ─── SOLO MARKER at 2:01 (121s) ───────────────────────────────────────────
+  const soloMarker = document.getElementById('solo-marker');
+  const soloLabel  = document.getElementById('solo-label');
+  const SOLO_TIME  = 121; // 2:01 in seconds
+
+  // Once we know the duration, set the exact % position
+  audio.addEventListener('loadedmetadata', () => {
+    const pct = (SOLO_TIME / audio.duration) * 100;
+    soloMarker.style.left = pct + '%';
+  });
+
+  // Click the marker: seek to 2:01 and start playing
+  soloMarker.addEventListener('click', (e) => {
+    e.stopPropagation(); // don't also trigger progress-bar click
+    audio.currentTime = SOLO_TIME;
+    if (audio.paused) {
+      audio.play();
+      btnPlay.textContent = '⏸ PAUSE';
+      reelL.classList.add('spinning');
+      reelR.classList.add('spinning');
+    }
+    // Flash the label briefly
+    soloLabel.classList.add('always-show');
+    setTimeout(() => soloLabel.classList.remove('always-show'), 2200);
+  });
 </script>
 
 </body>
