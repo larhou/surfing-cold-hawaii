@@ -814,7 +814,7 @@
 
 <!-- ─── NAV ──────────────────────────────────────────────── -->
 <nav>
-  <div class="nav-logo"><img src="favicon-32.png" alt="wave" style="width:22px;height:22px;vertical-align:middle;margin-right:6px;display:inline-block;"> Cold Hawaii 🎸</div>
+  <div class="nav-logo">Cold Hawaii 🎸</div>
   <ul class="nav-links">
     <li><a href="#listen">Listen</a></li>
     <li><a href="#about">The Song</a></li>
@@ -1397,6 +1397,20 @@
   });
 
   // Click the marker: seek to 2:01 and start playing
+  // Now Playing bar — click scrolls to player AND starts playback
+  document.querySelector('.hero-now-playing').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('listen').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      if (audio.paused) {
+        audio.play().then(() => {
+          btnPlay.textContent = '⏸';
+          document.querySelectorAll('.reel').forEach(r => r.style.animationPlayState = 'running');
+        }).catch(() => {});
+      }
+    }, 600);
+  });
+
   soloMarker.addEventListener('click', (e) => {
     e.stopPropagation(); // don't also trigger progress-bar click
     audio.currentTime = SOLO_TIME;
