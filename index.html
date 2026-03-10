@@ -880,11 +880,11 @@
 <!-- ─── HERO ──────────────────────────────────────────────── -->
 <section id="hero">
   <div class="bg"></div>
-  <a href="#listen" class="hero-now-playing">
+  <div class="hero-now-playing" id="hero-now-playing" style="cursor:pointer;">
     <div class="now-playing-dot"></div>
     <div class="waveform"><span></span><span></span><span></span><span></span><span></span></div>
     Now Playing — Click to Listen
-  </a>
+  </div>
   <div class="hero-inner">
     <div class="hero-genre-badge">🎸 Original Song &nbsp;·&nbsp; Hard Rock</div>
     <span class="hero-stamp">Klitmøller, Denmark · North Sea</span>
@@ -1454,17 +1454,22 @@
 
   // Click the marker: seek to 2:01 and start playing
   // Now Playing bar — click scrolls to player AND starts playback
-  document.querySelector('.hero-now-playing').addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('listen').scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => {
+  document.getElementById('hero-now-playing').addEventListener('click', () => {
+    const listenSection = document.getElementById('listen');
+    listenSection.scrollIntoView({ behavior: 'smooth' });
+    // Try to play immediately (works if user has already interacted)
+    const tryPlay = () => {
       if (audio.paused) {
         audio.play().then(() => {
-          btnPlay.textContent = '⏸';
+          btnPlay.textContent = '⏸ PAUSE';
           document.querySelectorAll('.reel').forEach(r => r.style.animationPlayState = 'running');
-        }).catch(() => {});
+        }).catch(() => {
+          // If blocked, click the play button after scroll completes
+          setTimeout(() => btnPlay.click(), 700);
+        });
       }
-    }, 600);
+    };
+    tryPlay();
   });
 
   // Global function for solo card click-to-play
